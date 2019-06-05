@@ -15,6 +15,7 @@ resource "digitalocean_droplet" "master" {
       type = "ssh"
       private_key = "${file(var.pvt_key)}"
       timeout = "2m"
+      host = "${self.ipv4_address}" 
       }
 
     provisioner "local-exec" {
@@ -47,7 +48,7 @@ resource "digitalocean_droplet" "master" {
   }
     
     provisioner "local-exec" {
-    command = "scp -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no root@${digitalocean_droplet.master.ipv4_address}:/root/.kube/config ~/.kube/."
+    command = "mkdir ~/.kube && scp -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no root@${digitalocean_droplet.master.ipv4_address}:/root/.kube/config ~/.kube/config"
   }
 }
 
@@ -64,6 +65,7 @@ resource "digitalocean_droplet" "worker1" {
       type = "ssh"
       private_key = "${file(var.pvt_key)}"
       timeout = "2m"
+      host = "${self.ipv4_address}" 
       }
 
     provisioner "local-exec" {
@@ -96,6 +98,7 @@ resource "digitalocean_droplet" "worker2" {
       type = "ssh"
       private_key = "${file(var.pvt_key)}"
       timeout = "2m"
+      host = "${self.ipv4_address}" 
       }
     
     provisioner "local-exec" {
